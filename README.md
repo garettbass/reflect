@@ -1,33 +1,32 @@
-# reflect - easy reflection and serialization for C++17
+# `reflect` - easy reflection for C++17
 
-Declare a struct or class with some reflected fields:
+Declare a struct with some reflected fields:
 
 ``` c++
 #include <reflect/reflect.hpp>
 
 struct example_struct {
-
-    // use the reflect_fields macro to declare
-    // reflected member variables
+    // use the reflect_fields macro to declare reflected fields
     reflect_fields(
         ((int),i),
         ((float),f),
         ((std::string),s) // NOTE: no trailing comma here
     )
-
-    double d; // this field will not be reflected
 };
+```
 
+Or a class with private fields:
+
+``` c++
 class example_class {
-
-    // the reflect_fields macro can be in a private scope
+    // the reflect_fields macro can appear in a private scope
     reflect_fields(
         ((int),_i),
         ((float),_f),
         ((std::string),_s)
     )
 
-    double _d;
+    double _d; // this field is not reflected
 
 public:
 
@@ -39,7 +38,6 @@ public:
         std::string s,
         double d)
     : _i(i), _f(f), _s(s), _d(d) {}
-
 };
 ```
 
@@ -53,7 +51,6 @@ reflect_type((person)) {
     reflect("address",value.address);
 }
 
-
 template<typename T>
 struct vector3 { T x, y, z; };
 
@@ -65,7 +62,7 @@ reflect_template((typename T),(vector3<T>)) {
 ```
 
 Additional headers provide reflection for standard library types like
-std::vector, std::map, and std::unordered_map:
+`std::vector`, `std::map`, and `std::unordered_map`:
 
 ``` c++
 #include <reflect/reflect.std.map.hpp>
