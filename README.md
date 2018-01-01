@@ -1,4 +1,4 @@
-# `reflect` - easy reflection for C++17
+## `reflect` - easy reflection and serialization for C++17
 
 Declare a struct with some reflected fields:
 
