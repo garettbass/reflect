@@ -1,0 +1,95 @@
+#!/bin/bash
+args=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        --help)
+            echo "cxx - A minimal C++ compiler shim"
+            echo
+            echo "USAGE: cxx [options] <input>"
+            echo
+            echo "OPTIONS:"
+            echo "  --help         Display available options"
+            echo "  -c++11         Compile as C++ 11"
+            echo "  -c++14         Compile as C++ 14"
+            echo "  -c++17         Compile as C++ 17"
+            echo "  -g             Generate source-level debug information"
+            echo "  -I <path>      Add directory to include search path"
+            echo "  -r, --run      Run and delete the compiled binary"
+            echo "  -t, --time     Time the compilation phase"
+            echo "  -v, --verbose  Verbose output"
+            exit
+        ;;
+        -c++11)
+            CXXSTD=-std=c++11
+            shift # argument
+        ;;
+        -c++14)
+            CXXSTD=-std=c++14
+            shift # argument
+        ;;
+        -c++17)
+            CXXSTD=-std=c++1z
+            shift # argument
+        ;;
+        -g)
+            CXXFLAGS="$CXXFLAGS -g"
+            shift # argument
+        ;;
+        -I)
+            CXXFLAGS="$CXXFLAGS -I$2"
+            shift # argument
+            shift # value
+        ;;
+        -r|--run)
+            RUN=1
+            shift # argument
+        ;;
+        -t|--time)
+            TIME="time -p"
+            shift # argument
+        ;;
+        -v|--verbose)
+            VERBOSE=1
+            shift # argument
+        ;;
+        *) # unknown option
+            args+=("$1") # accumulate inputs
+            shift # argument
+        ;;
+    esac
+done
+set -- "${args[@]}" # restore positional arguments
+
+#-------------------------------------------------------------------------------
+
+CXX=${CXX:-c++}
+SRCDIR=$(dirname $1)
+SRCFILE=$SRCDIR/$(basename $1)
+BINFILE=${BINFILE:-$SRCFILE.exe}
+
+#-------------------------------------------------------------------------------
+
+COMPILE="$CXX $CXXSTD $CXXFLAGS -Werror -o$BINFILE -I$SRCDIR/.. $SRCFILE"
+if [ $VERBOSE ]; then
+    echo $COMPILE
+fi
+$TIME $COMPILE
+STATUS=$?
+echo -----------------
+
+#-------------------------------------------------------------------------------
+
+if [ !$STATUS ]; then
+    if [ $RUN  ]; then
+        $BINFILE "$@"
+        STATUS=$?
+        rm -rf $BINFILE
+        echo -----------------
+    fi
+fi
+
+#-------------------------------------------------------------------------------
+
+echo [status:$STATUS]
+exit $status
