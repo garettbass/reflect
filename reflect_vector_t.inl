@@ -11,8 +11,14 @@
     }
 
     reflect_encode_template((typename T,class A),(reflect_vector_t<T,A>)) {
-        for (const T& t : value) {
-            reflect(t);
+        if constexpr(std::is_fundamental_v<T>) {
+            for (const T t : value) {
+                reflect(t);
+            }
+        } else {
+            for (const T& t : value) {
+                reflect(t);
+            }
         }
     }
 

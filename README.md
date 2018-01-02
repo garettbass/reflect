@@ -70,13 +70,12 @@ Additional headers provide reflection for standard library types like
 #include <reflect/reflect.std.vector.hpp>
 
 struct example_struct_2 {
-
     reflect_fields(
         ((std::map<int,float>),numbers),
         ((std::unordered_map<std::string,person>),people),
-        ((std::vector<vector3<float>>),vector)
+        ((std::vector<vector3<float>>),vector),
+        ((std::vector<bool>),bitmap)
     );
-
 };
 ```
 
@@ -99,17 +98,17 @@ int main(int,char**) {
     encode(s);
     // {
     //     "i":1,
-    //     "f":2.5,
+    //     "f":2.3,
     //     "s":"hello"
     // }
 
-    reflect::string_reader reader(R"({ "i":2, "f":3.5, "s":"world" })");
+    reflect::string_reader reader(R"({ "i":2, "f":3.4, "s":"world" })");
     reflect::codecs::json::decoder decode(reader);
     decode(s);
     encode(s);
     // {
     //     "i":2,
-    //     "f":3.5,
+    //     "f":3.4,
     //     "s":"world"
     // }
 
@@ -122,6 +121,10 @@ int main(int,char**) {
         /*vector*/{
             {1,2,3},
             {4,5,6},
+        },
+        /*bitmap*/{
+            false,
+            true,
         },
     };
     encode(s2);
@@ -151,6 +154,10 @@ int main(int,char**) {
     //             "y":5,
     //             "z":6
     //         }
+    //     ],
+    //     "bitmap":[
+    //         false,
+    //         true
     //     ]
     // }
 
