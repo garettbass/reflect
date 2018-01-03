@@ -70,7 +70,7 @@ BINFILE=${BINFILE:-$SRCFILE.exe}
 
 #-------------------------------------------------------------------------------
 
-COMPILE="$CXX $CXXSTD $CXXFLAGS -Werror -o$BINFILE -I$SRCDIR/.. $SRCFILE"
+COMPILE="$CXX $CXXSTD $CXXFLAGS -Werror -o$BINFILE $SRCFILE"
 if [ $VERBOSE ]; then
     echo $COMPILE
 fi

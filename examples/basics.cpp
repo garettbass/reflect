@@ -1,8 +1,8 @@
-////usr/bin/env $(dirname $0)/cxx -c++17 -r $0; exit $?
+////usr/bin/env $(dirname $0)/cxx -c++17 -I $(dirname $0)/../.. -r $0; exit $?
 
 //------------------------------------------------------------------------------
 // Declare a struct or class with some reflected fields:
-#include "../reflect.hpp"
+#include <reflect/reflect.hpp>
 
 struct example_struct {
 
@@ -62,9 +62,9 @@ reflect_template((typename T),(vector3<T>)) {
 // Additional headers provide reflection for standard library types,
 // std::vector, std::map, and std::unordered_map:
 
-#include "../reflect.std.map.hpp"
-#include "../reflect.std.unordered_map.hpp"
-#include "../reflect.std.vector.hpp"
+#include <reflect/reflect.std.map.hpp>
+#include <reflect/reflect.std.unordered_map.hpp>
+#include <reflect/reflect.std.vector.hpp>
 
 struct example_struct_2 {
     reflect_fields(
@@ -78,8 +78,8 @@ struct example_struct_2 {
 //------------------------------------------------------------------------------
 // Serialize to/from JSON:
 
-#include "../codecs/json/decoder.hpp"
-#include "../codecs/json/encoder.hpp"
+#include <reflect/codecs/json/decoder.hpp>
+#include <reflect/codecs/json/encoder.hpp>
 
 int main(int,char**) {
     reflect::codecs::json::preferences prefs;
