@@ -80,15 +80,14 @@ namespace reflect::assert {
 #define _reflect_stringify_(...) #__VA_ARGS__
 #define _reflect_stringify(x) _reflect_stringify_(x)
 
-#define _reflect_location ::reflect::assert::location{ \
-    __FILE__, __LINE__, __func__, "()" \
-}
+#define _reflect_location ( \
+    ::reflect::assert::location{__FILE__, __LINE__, __func__, "()"} \
+)
 
 #if reflect_assert_enabled
 
     #define reflect_assert(expr) ((void)( \
-        bool(expr) \
-        or \
+        bool(expr) or \
         (reflect_fail("reflect_assert",_reflect_stringify((expr))),false) \
     ))
 
@@ -101,12 +100,6 @@ namespace reflect::assert {
 #define reflect_fail(...) ( \
     ::reflect::assert::fail(_reflect_location, ##__VA_ARGS__) \
 )
-
-#define reflect_fail_if(expr) ((void)( \
-    bool(expr) \
-    and \
-    (reflect_fail("reflect_fail_if",_reflect_stringify((expr))),false) \
-))
 
 #define reflect_todo(...) ( \
     ::reflect::assert::todo(_reflect_location, ##__VA_ARGS__) \
